@@ -1,272 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>BUS Core · Microkernel Debug</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUS Core // Industrial Ops</title>
 
-  <style>
-    /* CYBER-INDUSTRIAL / MICROKERNEL DEBUG STYLE */
-    :root {
-      --bg: #000000;
-      --panel: #0d1117;
-      --border: #1f2a36;
-      --accent: #00FF6A; /* Neon Green */
-      --text: #F0F6F0;
-      --muted: #8899AA;
-      --font-mono: 'Consolas', 'Monospace', monospace;
-    }
+    <!-- Utility libs (fine for marketing site) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    * {
-      box-sizing: border-box;
-    }
+    <style>
+        :root {
+            /* Industrial Palette */
+            --bg: #050505;
+            --panel: #0a0a0a;
+            --border: #1f2a36;
+            --border-highlight: #30363d;
 
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      /* Subtle grid texture for background */
-      background-image:
-        linear-gradient(rgba(0, 255, 106, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 106, 0.04) 1px, transparent 1px);
-      background-size: 30px 30px;
-    }
+            /* Accents */
+            --accent-purple: #a855f7;
+            --accent-blue: #3b82f6;
+            --accent-orange: #f97316;
+            --accent-green: #00FF6A; /* Neon */
 
-    main.shell {
-      max-width: 720px;
-      width: 100%;
-      border: 1px solid var(--border);
-      background: var(--panel);
-      padding: 32px;
-      border-radius: 2px; /* Sharp corners */
-      box-shadow: 0 0 15px rgba(0, 255, 106, 0.2); /* Neon glow */
-    }
+            --text-main: #F0F6F0;
+            --text-muted: #6b7280;
 
-    .eyebrow {
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-      font-family: var(--font-mono);
-    }
+            --font-mono: 'Consolas', 'Monospace', monospace;
+        }
 
-    h1 {
-      font-size: 32px;
-      margin: 0 0 16px;
-      font-family: var(--font-mono); /* Monospace title */
-    }
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            /* Subtle grid texture */
+            background-image:
+                linear-gradient(rgba(31, 42, 54, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(31, 42, 54, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
 
-    p {
-      margin: 0 0 14px;
-      line-height: 1.6;
-    }
+        /* Sharp industrial panels */
+        .industrial-panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            position: relative;
+        }
 
-    .muted {
-      color: var(--muted);
-      font-size: 14px;
-    }
+        /* Bracket corners */
+        .bracket-corner::before,
+        .bracket-corner::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
 
-    .section {
-      margin-top: 30px;
-      padding-top: 20px;
-      border-top: 1px dashed var(--border); /* Dashed separator */
-    }
+        .bracket-corner::before {
+            top: -1px; left: -1px;
+            border-top-color: var(--border-highlight);
+            border-left-color: var(--border-highlight);
+        }
+        .bracket-corner::after {
+            bottom: -1px; right: -1px;
+            border-bottom-color: var(--border-highlight);
+            border-right-color: var(--border-highlight);
+        }
 
-    .section h2 {
-      font-size: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--accent);
-      margin: 0 0 10px;
-      font-family: var(--font-mono);
-    }
+        .industrial-panel:hover {
+            border-color: var(--border-highlight);
+        }
 
-    ul {
-      padding-left: 20px;
-      margin: 10px 0 0;
-      font-size: 14px;
-      list-style-type: '>> '; /* Custom list marker */
-    }
+        /* Sidebar nav */
+        .nav-item {
+            border-left: 2px solid transparent;
+            color: var(--text-muted);
+            transition: all 0.1s;
+        }
+        .nav-item:hover,
+        .nav-item.active {
+            background: #111;
+            color: var(--text-main);
+            border-left-color: var(--accent-green);
+        }
 
-    .form-wrapper {
-      margin-top: 24px;
-      padding: 18px;
-      border-radius: 2px;
-      border: 1px solid var(--accent); /* Accent border on the form */
-      background: #050608;
-      box-shadow: 0 0 8px rgba(0, 255, 106, 0.2);
-      position: relative;
-      overflow: hidden;
-    }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); }
+        ::-webkit-scrollbar-thumb:hover { background: var(--border-highlight); }
 
-    .form-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--accent);
-      font-family: var(--font-mono);
-    }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
 
-    .legal {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* Custom Form Styling */
-    .beta-form input[type="email"] {
-      background: #111;
-      border: 1px solid var(--border);
-      color: var(--accent); /* Neon text in input */
-      padding: 10px 12px;
-      border-radius: 0px;
-      font-size: 16px;
-      font-family: var(--font-mono);
-    }
-
-    .btn-submit {
-      background: var(--accent);
-      color: var(--panel); /* Dark text on neon button */
-      border: none;
-      padding: 10px 16px;
-      border-radius: 0px;
-      cursor: pointer;
-      font-weight: 700;
-      font-family: var(--font-mono);
-      transition: background 0.2s, color 0.2s, opacity 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-submit:hover:not(:disabled) {
-      background: #00e05c;
-      color: #000;
-    }
-
-    .btn-submit:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    @media (max-width: 640px) {
-      main.shell {
-        padding: 24px 18px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .form-wrapper div[style*="display:flex"] {
-        flex-direction: column;
-      }
-
-      .btn-submit {
-        width: 100%;
-      }
-    }
-  </style>
+        .text-xxs { font-size: 0.65rem; }
+    </style>
 </head>
-<body>
-  <main class="shell">
-    <div class="eyebrow">BUS Core :: STATUS = READY</div>
+<body class="flex h-screen overflow-hidden text-sm">
 
-    <h1>[STOP] Stop renting your own shop data.</h1>
+    <!-- SIDEBAR -->
+    <aside class="w-56 flex-shrink-0 border-r border-[#1f2a36] bg-[#080808] flex flex-col justify-between z-20">
+        <div>
+            <!-- Header -->
+            <div class="p-5 border-b border-[#1f2a36]">
+                <div class="text-[#00FF6A] font-bold tracking-tight text-lg">BUS Core</div>
+                <div class="text-xxs text-[#6b7280] tracking-widest uppercase mt-1">Version 0.6.0 :: IRON_CORE</div>
+            </div>
 
-    <p>
-      BUS Core is a local-first “workshop OS” for makers and small shops.
-      It tracks inventory, vendors, and runs on your own machine – no forced cloud,
-      no monthly rent just to see your stock.
-    </p>
+            <!-- Navigation -->
+            <nav class="mt-6 flex flex-col gap-1">
+                <div class="px-5 text-xxs text-[#6b7280] uppercase tracking-wider mb-2 font-bold">Tools</div>
 
-    <p class="muted">
-      BUILT BY: Canadian Forces materials tech with 12+ years in a real workshop.
-    </p>
+                <button onclick="navigate(event, 'dashboard')" class="nav-item active px-5 py-2 text-left w-full">
+                    Inventory
+                </button>
+                <button onclick="navigate(event, 'contacts')" class="nav-item px-5 py-2 text-left w-full">
+                    Contacts
+                </button>
+                <button onclick="navigate(event, 'runs')" class="nav-item px-5 py-2 text-left w-full">
+                    Manufacturing
+                </button>
 
-    <div class="form-wrapper">
-      <div class="form-title">INITIATE: Early Access Request</div>
-      <p class="muted">
-        Your email will only be used for critical build releases and method updates. (Low volume.)
-      </p>
+                <div class="px-5 text-xxs text-[#6b7280] uppercase tracking-wider mb-2 mt-6 font-bold">System</div>
 
-      <!-- MAILCHIMP-WIRED FORM -->
-      <form
-        id="beta-signup-form"
-        class="beta-form"
-        action="https://buscore.us18.list-manage.com/subscribe/post?u=18fe0aecdd6d2768d2fb0ebdf&amp;id=7d86cb2aac&amp;f_id=0049a4e6f0"
-        method="post"
-        name="mc-embedded-subscribe-form"
-        target="_blank"
-        novalidate
-      >
-        <div style="display:flex; gap:10px;">
-          <input 
-            type="email" 
-            name="EMAIL"
-            id="mce-EMAIL"
-            placeholder="[EMAIL_ADDRESS]" 
-            required 
-            aria-label="Email address for early access"
-            style="flex: 1; min-width: 180px;"
-          >
-          <button type="submit" class="btn-submit">
-            REQUEST ACCESS
-          </button>
+                <button class="nav-item px-5 py-2 text-left w-full">
+                    Settings
+                </button>
+                <button class="nav-item px-5 py-2 text-left w-full">
+                    Logs
+                </button>
+            </nav>
         </div>
 
-        <!-- Mailchimp honeypot: do not remove -->
-        <div aria-hidden="true" style="position: absolute; left: -5000px; top: 0;">
-          <!-- real people should not fill this in and expect good things -->
-          <input type="text" name="b_18fe0aecdd6d2768d2fb0ebdf_7d86cb2aac" tabindex="-1" value="">
+        <!-- Bottom status -->
+        <div class="p-4 border-t border-[#1f2a36]">
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-2 h-2 bg-[#00FF6A] rounded-none"></div>
+                <span class="text-xs text-[#6b7280]">SYSTEM ONLINE</span>
+            </div>
+
+            <button onclick="toggleModal()" class="w-full bg-[#1f2a36] border border-[#00FF6A] text-[#00FF6A] hover:bg-[#00FF6A] hover:text-black font-bold py-2 px-3 text-xs uppercase transition-colors tracking-wide rounded-none">
+                [ REQUEST_ACCESS ]
+            </button>
         </div>
+    </aside>
 
-        <p class="legal" id="beta-message" style="margin-top: 10px;">
-          <span style="color:var(--text)">// Data integrity maintained. No telemetry is collected.</span>
-        </p>
-      </form>
-      <!-- END MAILCHIMP FORM -->
+    <!-- MAIN CONSOLE -->
+    <main class="flex-1 overflow-y-auto relative p-6 md:p-10">
+        <div id="view-dashboard" class="max-w-[1600px] mx-auto space-y-6">
 
+            <!-- HERO / INIT MESSAGE -->
+            <div class="industrial-panel p-6 bracket-corner">
+                <div class="text-xs text-[#00FF6A] uppercase tracking-[0.25em] mb-2">// CONSOLE_READY</div>
+                <h1 class="text-2xl md:text-3xl font-bold mb-3">
+                    [STOP] Stop renting your own shop data.
+                </h1>
+                <p class="text-sm text-gray-200 mb-1">
+                    BUS Core is a local-first “workshop OS” for makers and small shops.
+                </p>
+                <p class="text-sm text-gray-400">
+                    Track inventory, vendors, and runs on your own machine — no forced cloud, no monthly rent, no telemetry.
+                </p>
+            </div>
+
+            <!-- METRICS ROW -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+                <!-- Active Items -->
+                <div class="industrial-panel p-4 border-l-2 border-l-[#a855f7] bracket-corner">
+                    <div class="text-xs font-bold text-[#a855f7] uppercase tracking-wider mb-1">Active Items</div>
+                    <div class="flex justify-between items-end">
+                        <div class="text-3xl font-bold text-white">1,042</div>
+                        <div class="text-xs text-gray-500 mb-1">SKUs</div>
+                    </div>
+                </div>
+
+                <!-- Vendors -->
+                <div class="industrial-panel p-4 border-l-2 border-l-[#3b82f6] bracket-corner">
+                    <div class="text-xs font-bold text-[#3b82f6] uppercase tracking-wider mb-1">Vendors</div>
+                    <div class="flex justify-between items-end">
+                        <div class="text-3xl font-bold text-white">12</div>
+                        <div class="text-xs text-gray-500 mb-1">Active</div>
+                    </div>
+                </div>
+
+                <!-- Runs -->
+                <div class="industrial-panel p-4 border-l-2 border-l-[#f97316] bracket-corner">
+                    <div class="text-xs font-bold text-[#f97316] uppercase tracking-wider mb-1">Runs (7d)</div>
+                    <div class="flex justify-between items-end">
+                        <div class="text-3xl font-bold text-white">8</div>
+                        <div class="text-xs text-gray-500 mb-1">In Progress</div>
+                    </div>
+                </div>
+
+                <!-- Saved -->
+                <div class="industrial-panel p-4 border-l-2 border-l-[#00FF6A] bracket-corner">
+                    <div class="text-xs font-bold text-[#00FF6A] uppercase tracking-wider mb-1">Saved (30d)</div>
+                    <div class="flex justify-between items-end">
+                        <div class="text-3xl font-bold text-white">$450</div>
+                        <div class="text-xs text-gray-500 mb-1">vs SaaS</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANELS ROW -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+
+                <!-- Items panel -->
+                <div class="industrial-panel p-0 flex flex-col h-[500px]">
+                    <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
+                        <h3 class="text-sm font-bold text-white">Items</h3>
+                        <span class="text-xs text-gray-500">[Manage Stock]</span>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col">
+                        <div class="text-xs text-gray-500 mb-4">
+                            Manage stock levels, bins, and physical locations.
+                        </div>
+
+                        <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-2 mb-4 relative">
+                            <div class="absolute top-2 right-2 text-xxs text-[#00FF6A]">LIVE_DATA</div>
+                            <canvas id="inventoryChart"></canvas>
+                        </div>
+
+                        <div class="space-y-2 mt-auto">
+                            <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#a855f7] hover:text-[#a855f7] transition-colors flex justify-between">
+                                <span>Add New SKU</span>
+                                <span>+</span>
+                            </button>
+                            <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#a855f7] hover:text-[#a855f7] transition-colors flex justify-between">
+                                <span>Audit Bins</span>
+                                <span>&gt;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vendors panel -->
+                <div class="industrial-panel p-0 flex flex-col h-[500px]">
+                    <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
+                        <h3 class="text-sm font-bold text-white">Vendors</h3>
+                        <span class="text-xs text-gray-500">[Supply Chain]</span>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col">
+                        <div class="text-xs text-gray-500 mb-4">
+                            Track supplier contacts, lead times, and active orders.
+                        </div>
+
+                        <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-0 mb-4 overflow-hidden">
+                            <table class="w-full text-xs text-left">
+                                <thead class="bg-[#111] text-gray-500">
+                                    <tr>
+                                        <th class="p-2 font-normal">NAME</th>
+                                        <th class="p-2 font-normal">STATUS</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-[#1f2a36]">
+                                    <tr><td class="p-2">McMaster-Carr</td><td class="p-2 text-[#00FF6A]">ACTIVE</td></tr>
+                                    <tr><td class="p-2">DigiKey</td><td class="p-2 text-[#00FF6A]">ACTIVE</td></tr>
+                                    <tr><td class="p-2">Local Metal</td><td class="p-2 text-yellow-500">DELAY</td></tr>
+                                    <tr><td class="p-2">Uline</td><td class="p-2 text-gray-500">INACTIVE</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#3b82f6] hover:text-[#3b82f6] transition-colors flex justify-between mt-auto">
+                            <span>Manage Vendors</span>
+                            <span>&gt;</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Runs panel -->
+                <div class="industrial-panel p-0 flex flex-col h-[500px]">
+                    <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
+                        <h3 class="text-sm font-bold text-white">Runs</h3>
+                        <span class="text-xs text-gray-500">[Manufacturing]</span>
+                    </div>
+
+                    <div class="p-4 flex-1 flex flex-col">
+                        <div class="text-xs text-gray-500 mb-4">
+                            Review manufacturing activity and cost analysis.
+                        </div>
+
+                        <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-2 mb-4 relative">
+                            <div class="absolute top-2 right-2 text-xxs text-[#f97316]">COST_ANALYSIS</div>
+                            <canvas id="runsChart"></canvas>
+                        </div>
+
+                        <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#f97316] hover:text-[#f97316] transition-colors flex justify-between mt-auto">
+                            <span>New Run Batch</span>
+                            <span>+</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- ACCESS REQUEST MODAL (Mailchimp-wired) -->
+    <div id="modal" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center z-50">
+        <div class="w-full max-w-md bg-[#050505] border border-[#00FF6A] p-1 shadow-[0_0_20px_rgba(0,255,106,0.1)]">
+            <div class="border border-[#1f2a36] p-8 relative">
+                <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
+                <div class="text-[#00FF6A] text-xs font-bold uppercase tracking-widest mb-4">&gt;&gt; Initiate_Sequence</div>
+                <h2 class="text-xl font-bold text-white mb-2">Request Access</h2>
+                <p class="text-gray-500 text-xs mb-6">
+                    Enter email to receive critical build releases and method updates. Low volume. No fluff.
+                </p>
+
+                <!-- MAILCHIMP FORM -->
+                <form
+                    id="mailchimp-form"
+                    class="space-y-4"
+                    action="https://buscore.us18.list-manage.com/subscribe/post?u=18fe0aecdd6d2768d2fb0ebdf&amp;id=7d86cb2aac&amp;f_id=0049a4e6f0"
+                    method="post"
+                    name="mc-embedded-subscribe-form"
+                    target="_blank"
+                    novalidate
+                >
+                    <input
+                        type="email"
+                        name="EMAIL"
+                        id="mce-EMAIL"
+                        placeholder="user@terminal.local"
+                        required
+                        class="w-full bg-[#111] border border-[#333] text-[#00FF6A] p-3 text-sm focus:border-[#00FF6A] focus:outline-none placeholder-gray-700 font-mono"
+                    >
+
+                    <!-- Honeypot: leave exactly as-is, hidden from humans -->
+                    <div aria-hidden="true" style="position:absolute; left:-5000px; top:0;">
+                        <!-- real people should not fill this in -->
+                        <input type="text" name="b_18fe0aecdd6d2768d2fb0ebdf_7d86cb2aac" tabindex="-1" value="">
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="mailchimp-submit"
+                        class="w-full bg-[#00FF6A] text-black font-bold py-3 text-sm uppercase hover:bg-white transition-colors"
+                    >
+                        Submit_Request
+                    </button>
+
+                    <p class="text-[11px] text-gray-600">
+                        // Data integrity maintained. No telemetry is collected.
+                    </p>
+                </form>
+                <!-- END MAILCHIMP FORM -->
+            </div>
+        </div>
     </div>
 
-    <section class="section">
-      <h2>[LOG] ACCESS_BENEFITS</h2>
-      <ul>
-        <li>RECEIVE: First access to test releases of BUS Core (v0.6.0 "Iron Core" currently live).</li>
-        <li>ACTION: Help define features for micro-shops, not enterprises.</li>
-        <li>VERIFY: See whether this solution earns the right to exist in real workshops.</li>
-      </ul>
-    </section>
+    <script>
+        // Modal toggle
+        function toggleModal() {
+            const m = document.getElementById('modal');
+            m.classList.toggle('hidden');
+        }
 
-    <section class="section">
-      <h2>[PROTOCOL] METHODOLOGY_V2</h2>
-      <p class="muted">
-        BUS Core is coded using an <strong>AI as junior dev team</strong> approach, enforced by strict logic:
-      </p>
-      <ul>
-        <li>A strict <strong>Source-of-Truth (SoT)</strong> text file defines the architecture and prevents LLM drift.</li>
-        <li>Every change must pass a <strong>smoke test</strong> before commit. (Status = GREEN.)</li>
-        <li>SYSTEM: Modular <strong>Microkernel + SQLite</strong> core for items, vendors, and runs.</li>
-      </ul>
-    </section>
-  </main>
+        // Sidebar active state (simple highlight)
+        function navigate(evt, page) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if (evt && evt.currentTarget) {
+                evt.currentTarget.classList.add('active');
+            }
+            // For now there is only one view; page arg is reserved for future.
+        }
 
-  <!-- Optional: simple UX so the button shows a processing state -->
-  <script>
-    const form = document.getElementById('beta-signup-form');
-    const button = form?.querySelector('.btn-submit');
+        // Mailchimp UX: disable button after submit
+        const mcForm = document.getElementById('mailchimp-form');
+        const mcButton = document.getElementById('mailchimp-submit');
+        if (mcForm && mcButton) {
+            mcForm.addEventListener('submit', function () {
+                mcButton.disabled = true;
+                mcButton.textContent = 'Processing...';
+            });
+        }
 
-    if (form && button) {
-      form.addEventListener('submit', function () {
-        button.disabled = true;
-        button.textContent = 'PROCESSING...';
-      });
-    }
-  </script>
+        // Chart: Inventory
+        const ctxInv = document.getElementById('inventoryChart').getContext('2d');
+        new Chart(ctxInv, {
+            type: 'bar',
+            data: {
+                labels: ['Steel', 'Alum', 'Parts', 'Elec', 'PLA'],
+                datasets: [{
+                    label: 'Stock',
+                    data: [45, 80, 24, 60, 90],
+                    backgroundColor: '#333',
+                    borderColor: '#a855f7',
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#a855f7'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#666', font: { family: 'Consolas', size: 10 } } },
+                    y: { grid: { color: '#1a1a1a' }, ticks: { display: false } }
+                }
+            }
+        });
+
+        // Chart: Runs
+        const ctxRuns = document.getElementById('runsChart').getContext('2d');
+        new Chart(ctxRuns, {
+            type: 'line',
+            data: {
+                labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                datasets: [{
+                    label: 'Output',
+                    data: [12, 19, 15, 25, 22, 30, 28],
+                    borderColor: '#f97316',
+                    borderWidth: 1.5,
+                    pointRadius: 0,
+                    tension: 0,
+                    fill: true,
+                    backgroundColor: 'rgba(249, 115, 22, 0.1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { color: '#1a1a1a' }, ticks: { color: '#666', font: { family: 'Consolas', size: 10 } } },
+                    y: { grid: { color: '#1a1a1a' }, ticks: { display: false } }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
