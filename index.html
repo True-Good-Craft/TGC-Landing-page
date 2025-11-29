@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BUS Core // Industrial Ops</title>
 
-    <!-- Utility libs (fine for marketing site) -->
+    <!-- Utility libs (marketing site only) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -137,16 +137,13 @@
             </nav>
         </div>
 
-        <!-- Bottom status -->
+        <!-- Sidebar bottom is now just status (small) if you ever want it;
+             leaving empty keeps focus on main bottom CTA. -->
         <div class="p-4 border-t border-[#1f2a36]">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="w-2 h-2 bg-[#00FF6A] rounded-none"></div>
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-2 bg-[#00FF6A] rounded-none animate-pulse"></div>
                 <span class="text-xs text-[#6b7280]">SYSTEM ONLINE</span>
             </div>
-
-            <button onclick="toggleModal()" class="w-full bg-[#1f2a36] border border-[#00FF6A] text-[#00FF6A] hover:bg-[#00FF6A] hover:text-black font-bold py-2 px-3 text-xs uppercase transition-colors tracking-wide rounded-none">
-                [ REQUEST_ACCESS ]
-            </button>
         </div>
     </aside>
 
@@ -301,6 +298,32 @@
                 </div>
 
             </div>
+
+            <!-- BOTTOM STRIP: STATUS + BIG CTA + LICENSE -->
+            <section class="industrial-panel mt-8 px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 justify-between">
+                <!-- Status Indicator -->
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 bg-[#00FF6A] rounded-none animate-pulse"></div>
+                    <span class="text-xs text-[#6b7280]">SYSTEM ONLINE</span>
+                </div>
+
+                <!-- Big Request Access CTA (center on larger screens) -->
+                <div class="flex-1 flex justify-center">
+                    <button
+                        onclick="toggleModal()"
+                        class="px-6 py-2 border border-[#00FF6A] bg-[#050505] text-[#00FF6A] hover:bg-[#00FF6A] hover:text-black font-bold text-xs md:text-sm uppercase tracking-wide rounded-none transition-colors"
+                    >
+                        [ REQUEST_ACCESS :: JOIN_EARLY_ACCESS ]
+                    </button>
+                </div>
+
+                <!-- License Badge -->
+                <div class="text-right">
+                    <div data-role="license-badge" class="text-[10px] text-[#444] font-mono">
+                        License: checking...
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -334,9 +357,8 @@
                         class="w-full bg-[#111] border border-[#333] text-[#00FF6A] p-3 text-sm focus:border-[#00FF6A] focus:outline-none placeholder-gray-700 font-mono"
                     >
 
-                    <!-- Honeypot: leave exactly as-is, hidden from humans -->
+                    <!-- Honeypot -->
                     <div aria-hidden="true" style="position:absolute; left:-5000px; top:0;">
-                        <!-- real people should not fill this in -->
                         <input type="text" name="b_18fe0aecdd6d2768d2fb0ebdf_7d86cb2aac" tabindex="-1" value="">
                     </div>
 
@@ -364,13 +386,13 @@
             m.classList.toggle('hidden');
         }
 
-        // Sidebar active state (simple highlight)
+        // Sidebar active state
         function navigate(evt, page) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if (evt && evt.currentTarget) {
                 evt.currentTarget.classList.add('active');
             }
-            // For now there is only one view; page arg is reserved for future.
+            // Single view for now; page arg reserved.
         }
 
         // Mailchimp UX: disable button after submit
