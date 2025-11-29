@@ -6,11 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
-      --bg: #050607;
-      --panel: #0c0f12;
-      --border: #2a2f36;
-      --text: #f5f5f5;
-      --muted: #8b949e;
+      /* Dark Theme Variables matching in-app style */
+      --bg: #0f1115;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #e6e6e6;
+      --muted: #9aa3b5;
+      --accent-button: #7c3aed; /* Purple accent for CTA */
     }
 
     * {
@@ -35,6 +37,8 @@
       border: 1px solid var(--border);
       background: var(--panel);
       padding: 32px 28px 28px;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
     }
 
     .eyebrow {
@@ -81,17 +85,18 @@
     }
 
     .form-wrapper {
-      margin-top: 16px;
-      padding: 12px 12px 4px;
-      border-radius: 4px;
+      margin-top: 24px;
+      padding: 16px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      background: #050608;
+      background: #111318; /* Slightly darker input background */
     }
 
     .form-title {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 4px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
     }
 
     .legal {
@@ -100,13 +105,50 @@
       color: var(--muted);
     }
 
+    /* Custom Form Styling */
+    .beta-form input[type="email"] {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .btn-submit {
+      background: var(--accent-button);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover:not(:disabled) {
+      background: #9333ea;
+    }
+    
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+    /* End Custom Form Styling */
+
     @media (max-width: 640px) {
       main.shell {
         padding: 24px 18px 18px;
       }
-
       h1 {
         font-size: 22px;
+      }
+      .beta-form input {
+          width: 100%;
+          margin-bottom: 10px;
+      }
+      .beta-form > div {
+          flex-direction: column;
       }
     }
   </style>
@@ -129,37 +171,78 @@
     </p>
 
     <div class="form-wrapper">
-      <div class="form-title">Early access list (low volume)</div>
+      <div class="form-title">Early Access: Test the Iron Core</div>
       <p class="muted">
-        I’ll only email when there’s a real build to test or a meaningful update.
+        I’ll only email when there’s a real build to test or a meaningful update. (Low Volume.)
       </p>
 
-      <!-- Mailchimp embed form goes here -->
-      <!-- Paste the <form>...</form> snippet from Mailchimp below this comment. -->
-
-    </div>
+      <form id="beta-signup-form" class="beta-form">
+        <div style="display:flex; gap:10px;">
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Your email address for early access" 
+            required 
+            aria-label="Email address for early access"
+            style="flex: 1; min-width: 180px;"
+          >
+          <button type="submit" class="btn-submit">
+            Request Access
+          </button>
+        </div>
+        <p class="legal" id="beta-message" style="margin-top: 10px;">
+          <span style="color:var(--text)">We respect your data. Your email is only used for updates.</span>
+        </p>
+      </form>
+      </div>
 
     <section class="section">
       <h2>If you add your email, you:</h2>
       <ul>
-        <li>Get first access to test releases of BUS Core.</li>
+        <li>Get first access to test releases of BUS Core (v0.6.0 "Iron Core" currently live).</li>
         <li>Help shape features for micro-shops, not enterprises.</li>
         <li>See whether this thing earns the right to exist in real workshops.</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>How it’s being built</h2>
+      <h2>How it’s being built (The SoT Method)</h2>
       <p class="muted">
-        BUS Core is coded using an “AI as junior dev team” approach:
+        BUS Core is coded using an **AI as junior dev team** approach, enforced by discipline:
       </p>
       <ul>
-        <li>A strict Source-of-Truth text file defines how the system behaves.</li>
-        <li>Every change must pass a smoke test before it’s “real.”</li>
-        <li>The current build already runs a microkernel + SQLite core for items, vendors, and runs.</li>
+        <li>A strict **Source-of-Truth (SoT)** text file defines the architecture and prevents drift.</li>
+        <li>Every change must pass a **smoke test** before it’s committed, keeping the core code stable and debt-free.</li>
+        <li>The system runs a modular **Microkernel + SQLite** core for items, vendors, and runs.</li>
       </ul>
     </section>
   </main>
+
+  <script>
+    document.getElementById('beta-signup-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const button = form.querySelector('.btn-submit');
+        const message = document.getElementById('beta-message');
+        const emailInput = form.querySelector('input[type="email"]').value;
+        
+        // Disable button immediately
+        button.disabled = true;
+        button.textContent = 'Processing...';
+
+        // --------------------------------------------------------
+        // NOTE: INTEGRATION REQUIRED HERE. 
+        // Replace this demo code with your actual Mailchimp/backend POST request.
+        // --------------------------------------------------------
+
+        // Simulate successful submission after 1.5 seconds
+        setTimeout(() => {
+            // Success State
+            message.innerHTML = '<span style="color:#22c55e;font-weight:600;">✅ Success! Check your inbox for the official invite.</span>';
+            button.style.display = 'none';
+            form.querySelector('input').disabled = true;
+        }, 1500); 
+    });
+  </script>
 </body>
 </html>
-
