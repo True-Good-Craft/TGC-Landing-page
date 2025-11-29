@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BUS Core · Local-first workshop OS</title>
+  <title>BUS Core · Microkernel Debug</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <style>
+    /* CYBER-INDUSTRIAL / MICROKERNEL DEBUG STYLE */
     :root {
-      /* Dark Theme Variables matching in-app style */
-      --bg: #0f1115;
-      --panel: #161b22;
-      --border: #30363d;
-      --text: #e6e6e6;
-      --muted: #9aa3b5;
-      --accent-button: #7c3aed; /* Purple accent for CTA */
+      --bg: #000000;
+      --panel: #0d1117;
+      --border: #1f2a36;
+      --accent: #00FF6A; /* Neon Green */
+      --text: #F0F6F0;
+      --muted: #8899AA;
+      --font-mono: 'Consolas', 'Monospace', monospace;
     }
 
     * {
@@ -21,7 +23,7 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: 'Segoe UI', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -29,6 +31,11 @@
       align-items: center;
       justify-content: center;
       padding: 24px;
+      /* Subtle grid texture for background */
+      background-image:
+        linear-gradient(rgba(0, 255, 106, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 106, 0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
     }
 
     main.shell {
@@ -36,27 +43,29 @@
       width: 100%;
       border: 1px solid var(--border);
       background: var(--panel);
-      padding: 32px 28px 28px;
-      border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      padding: 32px;
+      border-radius: 2px; /* Sharp corners */
+      box-shadow: 0 0 15px rgba(0, 255, 106, 0.2); /* Neon glow */
     }
 
     .eyebrow {
       font-size: 12px;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-family: var(--font-mono);
     }
 
     h1 {
-      font-size: 28px;
-      margin: 0 0 12px;
+      font-size: 32px;
+      margin: 0 0 16px;
+      font-family: var(--font-mono); /* Monospace title */
     }
 
     p {
-      margin: 0 0 10px;
-      line-height: 1.5;
+      margin: 0 0 14px;
+      line-height: 1.6;
     }
 
     .muted {
@@ -65,38 +74,44 @@
     }
 
     .section {
-      margin-top: 24px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px dashed var(--border); /* Dashed separator */
     }
 
     .section h2 {
-      font-size: 14px;
+      font-size: 16px;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      margin: 0 0 8px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      margin: 0 0 10px;
+      font-family: var(--font-mono);
     }
 
     ul {
-      padding-left: 18px;
-      margin: 8px 0 0;
+      padding-left: 20px;
+      margin: 10px 0 0;
       font-size: 14px;
+      list-style-type: '>> '; /* Custom list marker */
     }
 
     .form-wrapper {
       margin-top: 24px;
-      padding: 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #111318; /* Slightly darker input background */
+      padding: 18px;
+      border-radius: 2px;
+      border: 1px solid var(--accent); /* Accent border on the form */
+      background: #050608;
+      box-shadow: 0 0 8px rgba(0, 255, 106, 0.2);
+      position: relative;
+      overflow: hidden;
     }
 
     .form-title {
       font-size: 16px;
       font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text);
+      margin-bottom: 12px;
+      color: var(--accent);
+      font-family: var(--font-mono);
     }
 
     .legal {
@@ -107,57 +122,62 @@
 
     /* Custom Form Styling */
     .beta-form input[type="email"] {
-      background: var(--panel);
+      background: #111;
       border: 1px solid var(--border);
-      color: var(--text);
+      color: var(--accent); /* Neon text in input */
       padding: 10px 12px;
-      border-radius: 6px;
+      border-radius: 0px;
       font-size: 16px;
+      font-family: var(--font-mono);
     }
 
     .btn-submit {
-      background: var(--accent-button);
-      color: #fff;
+      background: var(--accent);
+      color: var(--panel); /* Dark text on neon button */
       border: none;
       padding: 10px 16px;
-      border-radius: 6px;
+      border-radius: 0px;
       cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      transition: background 0.2s, color 0.2s, opacity 0.2s;
+      white-space: nowrap;
     }
 
     .btn-submit:hover:not(:disabled) {
-      background: #9333ea;
+      background: #00e05c;
+      color: #000;
     }
-    
+
     .btn-submit:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
+      opacity: 0.6;
+      cursor: not-allowed;
     }
-    /* End Custom Form Styling */
 
     @media (max-width: 640px) {
       main.shell {
-        padding: 24px 18px 18px;
+        padding: 24px 18px;
       }
+
       h1 {
-        font-size: 22px;
+        font-size: 24px;
       }
-      .beta-form input {
-          width: 100%;
-          margin-bottom: 10px;
+
+      .form-wrapper div[style*="display:flex"] {
+        flex-direction: column;
       }
-      .beta-form > div {
-          flex-direction: column;
+
+      .btn-submit {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
   <main class="shell">
-    <div class="eyebrow">BUS Core · local-first workshop OS</div>
+    <div class="eyebrow">BUS Core :: STATUS = READY</div>
 
-    <h1>Stop renting your own shop data.</h1>
+    <h1>[STOP] Stop renting your own shop data.</h1>
 
     <p>
       BUS Core is a local-first “workshop OS” for makers and small shops.
@@ -166,83 +186,87 @@
     </p>
 
     <p class="muted">
-      Built by a Canadian Forces materials tech with 12+ years in a real workshop,
-      for people who actually touch materials.
+      BUILT BY: Canadian Forces materials tech with 12+ years in a real workshop.
     </p>
 
     <div class="form-wrapper">
-      <div class="form-title">Early Access: Test the Iron Core</div>
+      <div class="form-title">INITIATE: Early Access Request</div>
       <p class="muted">
-        I’ll only email when there’s a real build to test or a meaningful update. (Low Volume.)
+        Your email will only be used for critical build releases and method updates. (Low volume.)
       </p>
 
-      <form id="beta-signup-form" class="beta-form">
+      <!-- MAILCHIMP-WIRED FORM -->
+      <form
+        id="beta-signup-form"
+        class="beta-form"
+        action="https://buscore.us18.list-manage.com/subscribe/post?u=18fe0aecdd6d2768d2fb0ebdf&amp;id=7d86cb2aac&amp;f_id=0049a4e6f0"
+        method="post"
+        name="mc-embedded-subscribe-form"
+        target="_blank"
+        novalidate
+      >
         <div style="display:flex; gap:10px;">
           <input 
             type="email" 
-            name="email" 
-            placeholder="Your email address for early access" 
+            name="EMAIL"
+            id="mce-EMAIL"
+            placeholder="[EMAIL_ADDRESS]" 
             required 
             aria-label="Email address for early access"
             style="flex: 1; min-width: 180px;"
           >
           <button type="submit" class="btn-submit">
-            Request Access
+            REQUEST ACCESS
           </button>
         </div>
+
+        <!-- Mailchimp honeypot: do not remove -->
+        <div aria-hidden="true" style="position: absolute; left: -5000px; top: 0;">
+          <!-- real people should not fill this in and expect good things -->
+          <input type="text" name="b_18fe0aecdd6d2768d2fb0ebdf_7d86cb2aac" tabindex="-1" value="">
+        </div>
+
         <p class="legal" id="beta-message" style="margin-top: 10px;">
-          <span style="color:var(--text)">We respect your data. Your email is only used for updates.</span>
+          <span style="color:var(--text)">// Data integrity maintained. No telemetry is collected.</span>
         </p>
       </form>
-      </div>
+      <!-- END MAILCHIMP FORM -->
+
+    </div>
 
     <section class="section">
-      <h2>If you add your email, you:</h2>
+      <h2>[LOG] ACCESS_BENEFITS</h2>
       <ul>
-        <li>Get first access to test releases of BUS Core (v0.6.0 "Iron Core" currently live).</li>
-        <li>Help shape features for micro-shops, not enterprises.</li>
-        <li>See whether this thing earns the right to exist in real workshops.</li>
+        <li>RECEIVE: First access to test releases of BUS Core (v0.6.0 "Iron Core" currently live).</li>
+        <li>ACTION: Help define features for micro-shops, not enterprises.</li>
+        <li>VERIFY: See whether this solution earns the right to exist in real workshops.</li>
       </ul>
     </section>
 
     <section class="section">
-      <h2>How it’s being built (The SoT Method)</h2>
+      <h2>[PROTOCOL] METHODOLOGY_V2</h2>
       <p class="muted">
-        BUS Core is coded using an **AI as junior dev team** approach, enforced by discipline:
+        BUS Core is coded using an <strong>AI as junior dev team</strong> approach, enforced by strict logic:
       </p>
       <ul>
-        <li>A strict **Source-of-Truth (SoT)** text file defines the architecture and prevents drift.</li>
-        <li>Every change must pass a **smoke test** before it’s committed, keeping the core code stable and debt-free.</li>
-        <li>The system runs a modular **Microkernel + SQLite** core for items, vendors, and runs.</li>
+        <li>A strict <strong>Source-of-Truth (SoT)</strong> text file defines the architecture and prevents LLM drift.</li>
+        <li>Every change must pass a <strong>smoke test</strong> before commit. (Status = GREEN.)</li>
+        <li>SYSTEM: Modular <strong>Microkernel + SQLite</strong> core for items, vendors, and runs.</li>
       </ul>
     </section>
   </main>
 
+  <!-- Optional: simple UX so the button shows a processing state -->
   <script>
-    document.getElementById('beta-signup-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const button = form.querySelector('.btn-submit');
-        const message = document.getElementById('beta-message');
-        const emailInput = form.querySelector('input[type="email"]').value;
-        
-        // Disable button immediately
+    const form = document.getElementById('beta-signup-form');
+    const button = form?.querySelector('.btn-submit');
+
+    if (form && button) {
+      form.addEventListener('submit', function () {
         button.disabled = true;
-        button.textContent = 'Processing...';
-
-        // --------------------------------------------------------
-        // NOTE: INTEGRATION REQUIRED HERE. 
-        // Replace this demo code with your actual Mailchimp/backend POST request.
-        // --------------------------------------------------------
-
-        // Simulate successful submission after 1.5 seconds
-        setTimeout(() => {
-            // Success State
-            message.innerHTML = '<span style="color:#22c55e;font-weight:600;">✅ Success! Check your inbox for the official invite.</span>';
-            button.style.display = 'none';
-            form.querySelector('input').disabled = true;
-        }, 1500); 
-    });
+        button.textContent = 'PROCESSING...';
+      });
+    }
   </script>
 </body>
 </html>
