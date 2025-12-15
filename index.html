@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BUS Core // Industrial Ops</title>
+    <title>TGC BUS Core // Local-First ERP</title>
 
-    <!-- Utility libs (marketing site only) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -17,11 +16,11 @@
             --border: #1f2a36;
             --border-highlight: #30363d;
 
-            /* Accents */
+            /* Accents - Core uses Blue/Orange/Green primarily */
             --accent-purple: #a855f7;
             --accent-blue: #3b82f6;
             --accent-orange: #f97316;
-            --accent-green: #00FF6A; /* Neon */
+            --accent-green: #00FF6A; /* Keeping the neon green for "Online" status */
 
             --text-main: #F0F6F0;
             --text-muted: #6b7280;
@@ -84,7 +83,7 @@
         .nav-item.active {
             background: #111;
             color: var(--text-main);
-            border-left-color: var(--accent-green);
+            border-left-color: var(--accent-blue); /* Blue for Core standard */
         }
 
         ::-webkit-scrollbar { width: 8px; }
@@ -103,27 +102,30 @@
 </head>
 <body class="flex h-screen overflow-hidden text-sm">
 
-    <!-- SIDEBAR -->
     <aside class="w-56 flex-shrink-0 border-r border-[#1f2a36] bg-[#080808] flex flex-col justify-between z-20">
         <div>
-            <!-- Header -->
             <div class="p-5 border-b border-[#1f2a36]">
-                <div class="text-[#00FF6A] font-bold tracking-tight text-lg">BUS Core</div>
-                <div class="text-xxs text-[#6b7280] tracking-widest uppercase mt-1">Version 0.6.0 :: IRON_CORE</div>
+                <div class="text-[#3b82f6] font-bold tracking-tight text-lg">BUS Core</div>
+                <div class="text-xxs text-[#6b7280] tracking-widest uppercase mt-1">v0.8.8 :: BETA</div>
             </div>
 
-            <!-- Navigation -->
             <nav class="mt-6 flex flex-col gap-1">
-                <div class="px-5 text-xxs text-[#6b7280] uppercase tracking-wider mb-2 font-bold">Tools</div>
+                <div class="px-5 text-xxs text-[#6b7280] uppercase tracking-wider mb-2 font-bold">Main</div>
 
-                <button onclick="navigate(event, 'dashboard')" class="nav-item active px-5 py-2 text-left w-full">
+                <button class="nav-item active px-5 py-2 text-left w-full">
+                    Dashboard
+                </button>
+                <button class="nav-item px-5 py-2 text-left w-full">
                     Inventory
                 </button>
-                <button onclick="navigate(event, 'contacts')" class="nav-item px-5 py-2 text-left w-full">
-                    Contacts
+                <button class="nav-item px-5 py-2 text-left w-full">
+                    Vendors
                 </button>
-                <button onclick="navigate(event, 'runs')" class="nav-item px-5 py-2 text-left w-full">
+                <button class="nav-item px-5 py-2 text-left w-full">
                     Manufacturing
+                </button>
+                <button class="nav-item px-5 py-2 text-left w-full">
+                    Files
                 </button>
 
                 <div class="px-5 text-xxs text-[#6b7280] uppercase tracking-wider mb-2 mt-6 font-bold">System</div>
@@ -137,46 +139,39 @@
             </nav>
         </div>
 
-        <!-- Sidebar bottom is now just status (small) if you ever want it;
-             leaving empty keeps focus on main bottom CTA. -->
         <div class="p-4 border-t border-[#1f2a36]">
             <div class="flex items-center gap-2">
                 <div class="w-2 h-2 bg-[#00FF6A] rounded-none animate-pulse"></div>
-                <span class="text-xs text-[#6b7280]">SYSTEM ONLINE</span>
+                <span class="text-xs text-[#6b7280]">LOCAL SERVER: OK</span>
             </div>
         </div>
     </aside>
 
-    <!-- MAIN CONSOLE -->
     <main class="flex-1 overflow-y-auto relative p-6 md:p-10">
         <div id="view-dashboard" class="max-w-[1600px] mx-auto space-y-6">
 
-            <!-- HERO / INIT MESSAGE -->
             <div class="industrial-panel p-6 bracket-corner">
-                <div class="text-xs text-[#00FF6A] uppercase tracking-[0.25em] mb-2">// CONSOLE_READY</div>
+                <div class="text-xs text-[#3b82f6] uppercase tracking-[0.25em] mb-2">// OPEN_SOURCE_INIT</div>
                 <h1 class="text-2xl md:text-3xl font-bold mb-3">
-                    [STOP] Stop renting your own shop data.
+                    The Local-First ERP for Makers.
                 </h1>
                 <p class="text-sm text-gray-200 mb-1">
-                    BUS Core is a local-first “workshop OS” for makers and small shops.
+                    Inventory, Manufacturing, and Contacts—running entirely on your machine.
                 </p>
                 <p class="text-sm text-gray-400">
-                    Track inventory, vendors, and runs on your own machine — no forced cloud, no monthly rent, no telemetry.
+                    No cloud required. No monthly subscriptions. You own your data.
                 </p>
             </div>
 
-            <!-- METRICS ROW -->
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-                <!-- Active Items -->
                 <div class="industrial-panel p-4 border-l-2 border-l-[#a855f7] bracket-corner">
-                    <div class="text-xs font-bold text-[#a855f7] uppercase tracking-wider mb-1">Active Items</div>
+                    <div class="text-xs font-bold text-[#a855f7] uppercase tracking-wider mb-1">Inventory Value</div>
                     <div class="flex justify-between items-end">
-                        <div class="text-3xl font-bold text-white">1,042</div>
-                        <div class="text-xs text-gray-500 mb-1">SKUs</div>
+                        <div class="text-3xl font-bold text-white">$12,450</div>
+                        <div class="text-xs text-gray-500 mb-1">FIFO Cost</div>
                     </div>
                 </div>
 
-                <!-- Vendors -->
                 <div class="industrial-panel p-4 border-l-2 border-l-[#3b82f6] bracket-corner">
                     <div class="text-xs font-bold text-[#3b82f6] uppercase tracking-wider mb-1">Vendors</div>
                     <div class="flex justify-between items-end">
@@ -185,59 +180,46 @@
                     </div>
                 </div>
 
-                <!-- Runs -->
                 <div class="industrial-panel p-4 border-l-2 border-l-[#f97316] bracket-corner">
-                    <div class="text-xs font-bold text-[#f97316] uppercase tracking-wider mb-1">Runs (7d)</div>
+                    <div class="text-xs font-bold text-[#f97316] uppercase tracking-wider mb-1">Production</div>
                     <div class="flex justify-between items-end">
                         <div class="text-3xl font-bold text-white">8</div>
-                        <div class="text-xs text-gray-500 mb-1">In Progress</div>
+                        <div class="text-xs text-gray-500 mb-1">Runs (7d)</div>
                     </div>
                 </div>
 
-                <!-- Saved -->
                 <div class="industrial-panel p-4 border-l-2 border-l-[#00FF6A] bracket-corner">
-                    <div class="text-xs font-bold text-[#00FF6A] uppercase tracking-wider mb-1">Saved (30d)</div>
+                    <div class="text-xs font-bold text-[#00FF6A] uppercase tracking-wider mb-1">Cost</div>
                     <div class="flex justify-between items-end">
-                        <div class="text-3xl font-bold text-white">$450</div>
-                        <div class="text-xs text-gray-500 mb-1">vs SaaS</div>
+                        <div class="text-3xl font-bold text-white">$0.00</div>
+                        <div class="text-xs text-gray-500 mb-1">Forever</div>
                     </div>
                 </div>
             </div>
 
-            <!-- PANELS ROW -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
 
-                <!-- Items panel -->
                 <div class="industrial-panel p-0 flex flex-col h-[500px]">
                     <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
-                        <h3 class="text-sm font-bold text-white">Items</h3>
-                        <span class="text-xs text-gray-500">[Manage Stock]</span>
+                        <h3 class="text-sm font-bold text-white">Inventory</h3>
+                        <span class="text-xs text-gray-500">[Metric & FIFO]</span>
                     </div>
 
                     <div class="p-4 flex-1 flex flex-col">
                         <div class="text-xs text-gray-500 mb-4">
-                            Manage stock levels, bins, and physical locations.
+                            Precision tracking (mg, ml, mm) with automatic cost rollups.
                         </div>
 
                         <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-2 mb-4 relative">
-                            <div class="absolute top-2 right-2 text-xxs text-[#00FF6A]">LIVE_DATA</div>
                             <canvas id="inventoryChart"></canvas>
                         </div>
 
                         <div class="space-y-2 mt-auto">
-                            <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#a855f7] hover:text-[#a855f7] transition-colors flex justify-between">
-                                <span>Add New SKU</span>
-                                <span>+</span>
-                            </button>
-                            <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#a855f7] hover:text-[#a855f7] transition-colors flex justify-between">
-                                <span>Audit Bins</span>
-                                <span>&gt;</span>
-                            </button>
+                             <div class="text-xs text-gray-600 text-center pb-2">// Charts generated from local SQLite DB</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Vendors panel -->
                 <div class="industrial-panel p-0 flex flex-col h-[500px]">
                     <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
                         <h3 class="text-sm font-bold text-white">Vendors</h3>
@@ -246,7 +228,7 @@
 
                     <div class="p-4 flex-1 flex flex-col">
                         <div class="text-xs text-gray-500 mb-4">
-                            Track supplier contacts, lead times, and active orders.
+                            Manage relationships and lead times without a CRM subscription.
                         </div>
 
                         <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-0 mb-4 overflow-hidden">
@@ -254,26 +236,20 @@
                                 <thead class="bg-[#111] text-gray-500">
                                     <tr>
                                         <th class="p-2 font-normal">NAME</th>
-                                        <th class="p-2 font-normal">STATUS</th>
+                                        <th class="p-2 font-normal">ROLE</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-[#1f2a36]">
-                                    <tr><td class="p-2">McMaster-Carr</td><td class="p-2 text-[#00FF6A]">ACTIVE</td></tr>
-                                    <tr><td class="p-2">DigiKey</td><td class="p-2 text-[#00FF6A]">ACTIVE</td></tr>
-                                    <tr><td class="p-2">Local Metal</td><td class="p-2 text-yellow-500">DELAY</td></tr>
+                                    <tr><td class="p-2">McMaster-Carr</td><td class="p-2 text-[#3b82f6]">VENDOR</td></tr>
+                                    <tr><td class="p-2">DigiKey</td><td class="p-2 text-[#3b82f6]">VENDOR</td></tr>
+                                    <tr><td class="p-2">John Doe</td><td class="p-2 text-[#a855f7]">CONTACT</td></tr>
                                     <tr><td class="p-2">Uline</td><td class="p-2 text-gray-500">INACTIVE</td></tr>
                                 </tbody>
                             </table>
                         </div>
-
-                        <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#3b82f6] hover:text-[#3b82f6] transition-colors flex justify-between mt-auto">
-                            <span>Manage Vendors</span>
-                            <span>&gt;</span>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Runs panel -->
                 <div class="industrial-panel p-0 flex flex-col h-[500px]">
                     <div class="p-4 border-b border-[#1f2a36] flex justify-between items-center bg-[#0d0d0d]">
                         <h3 class="text-sm font-bold text-white">Runs</h3>
@@ -282,129 +258,43 @@
 
                     <div class="p-4 flex-1 flex flex-col">
                         <div class="text-xs text-gray-500 mb-4">
-                            Review manufacturing activity and cost analysis.
+                            Recipe-based production runs. Atomic stock commits.
                         </div>
 
                         <div class="flex-1 border border-[#1f2a36] bg-[#050505] p-2 mb-4 relative">
-                            <div class="absolute top-2 right-2 text-xxs text-[#f97316]">COST_ANALYSIS</div>
                             <canvas id="runsChart"></canvas>
                         </div>
-
-                        <button class="w-full text-left px-3 py-2 text-xs border border-[#1f2a36] hover:border-[#f97316] hover:text-[#f97316] transition-colors flex justify-between mt-auto">
-                            <span>New Run Batch</span>
-                            <span>+</span>
-                        </button>
                     </div>
                 </div>
 
             </div>
 
-            <!-- BOTTOM STRIP: STATUS + BIG CTA + LICENSE -->
             <section class="industrial-panel mt-8 px-4 py-3 flex flex-col md:flex-row md:items-center gap-3 justify-between">
-                <!-- Status Indicator -->
                 <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-[#00FF6A] rounded-none animate-pulse"></div>
-                    <span class="text-xs text-[#6b7280]">SYSTEM ONLINE</span>
+                    <div class="w-2 h-2 bg-[#3b82f6] rounded-full"></div>
+                    <span class="text-xs text-[#6b7280]">READY TO DEPLOY</span>
                 </div>
 
-                <!-- Big Request Access CTA (center on larger screens) -->
                 <div class="flex-1 flex justify-center">
-                    <button
-                        onclick="toggleModal()"
-                        class="px-6 py-2 border border-[#00FF6A] bg-[#050505] text-[#00FF6A] hover:bg-[#00FF6A] hover:text-black font-bold text-xs md:text-sm uppercase tracking-wide rounded-none transition-colors"
+                    <a
+                        href="https://github.com/YOUR_USERNAME/YOUR_REPO"
+                        target="_blank"
+                        class="px-6 py-2 border border-[#3b82f6] bg-[#050505] text-[#3b82f6] hover:bg-[#3b82f6] hover:text-white font-bold text-xs md:text-sm uppercase tracking-wide rounded-none transition-colors flex items-center gap-2"
                     >
-                        [ REQUEST_ACCESS :: JOIN_EARLY_ACCESS ]
-                    </button>
+                        <span>[ DOWNLOAD_CORE :: GITHUB ]</span>
+                    </a>
                 </div>
 
-                <!-- License Badge -->
                 <div class="text-right">
-                    <div data-role="license-badge" class="text-[10px] text-[#444] font-mono">
-                        License: checking...
+                    <div class="text-[10px] text-[#888] font-mono">
+                        License: AGPLv3 // Open Source
                     </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- ACCESS REQUEST MODAL (Mailchimp-wired) -->
-    <div id="modal" class="fixed inset-0 bg-black/90 hidden flex items-center justify-center z-50">
-        <div class="w-full max-w-md bg-[#050505] border border-[#00FF6A] p-1 shadow-[0_0_20px_rgba(0,255,106,0.1)]">
-            <div class="border border-[#1f2a36] p-8 relative">
-                <button onclick="toggleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">✕</button>
-                <div class="text-[#00FF6A] text-xs font-bold uppercase tracking-widest mb-4">&gt;&gt; Initiate_Sequence</div>
-                <h2 class="text-xl font-bold text-white mb-2">Request Access</h2>
-                <p class="text-gray-500 text-xs mb-6">
-                    Enter email to receive critical build releases and method updates. Low volume. No fluff.
-                </p>
-
-                <!-- MAILCHIMP FORM -->
-                <form
-                    id="mailchimp-form"
-                    class="space-y-4"
-                    action="https://buscore.us18.list-manage.com/subscribe/post?u=18fe0aecdd6d2768d2fb0ebdf&amp;id=7d86cb2aac&amp;f_id=0049a4e6f0"
-                    method="post"
-                    name="mc-embedded-subscribe-form"
-                    target="_blank"
-                    novalidate
-                >
-                    <input
-                        type="email"
-                        name="EMAIL"
-                        id="mce-EMAIL"
-                        placeholder="user@terminal.local"
-                        required
-                        class="w-full bg-[#111] border border-[#333] text-[#00FF6A] p-3 text-sm focus:border-[#00FF6A] focus:outline-none placeholder-gray-700 font-mono"
-                    >
-
-                    <!-- Honeypot -->
-                    <div aria-hidden="true" style="position:absolute; left:-5000px; top:0;">
-                        <input type="text" name="b_18fe0aecdd6d2768d2fb0ebdf_7d86cb2aac" tabindex="-1" value="">
-                    </div>
-
-                    <button
-                        type="submit"
-                        id="mailchimp-submit"
-                        class="w-full bg-[#00FF6A] text-black font-bold py-3 text-sm uppercase hover:bg-white transition-colors"
-                    >
-                        Submit_Request
-                    </button>
-
-                    <p class="text-[11px] text-gray-600">
-                        // Data integrity maintained. No telemetry is collected.
-                    </p>
-                </form>
-                <!-- END MAILCHIMP FORM -->
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Modal toggle
-        function toggleModal() {
-            const m = document.getElementById('modal');
-            m.classList.toggle('hidden');
-        }
-
-        // Sidebar active state
-        function navigate(evt, page) {
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (evt && evt.currentTarget) {
-                evt.currentTarget.classList.add('active');
-            }
-            // Single view for now; page arg reserved.
-        }
-
-        // Mailchimp UX: disable button after submit
-        const mcForm = document.getElementById('mailchimp-form');
-        const mcButton = document.getElementById('mailchimp-submit');
-        if (mcForm && mcButton) {
-            mcForm.addEventListener('submit', function () {
-                mcButton.disabled = true;
-                mcButton.textContent = 'Processing...';
-            });
-        }
-
         // Chart: Inventory
         const ctxInv = document.getElementById('inventoryChart').getContext('2d');
         new Chart(ctxInv, {
@@ -414,10 +304,10 @@
                 datasets: [{
                     label: 'Stock',
                     data: [45, 80, 24, 60, 90],
-                    backgroundColor: '#333',
-                    borderColor: '#a855f7',
+                    backgroundColor: '#111',
+                    borderColor: '#3b82f6',
                     borderWidth: 1,
-                    hoverBackgroundColor: '#a855f7'
+                    hoverBackgroundColor: '#3b82f6'
                 }]
             },
             options: {
