@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BUS Core — Local-first ERP</title>
+  <title>BUS Core — Local-first ERP for Small Workshops</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -47,25 +47,6 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
     }
 
-    .sidebar-pill{
-      background: rgba(255,255,255,.03);
-      border:1px solid var(--border);
-      border-radius: 10px;
-    }
-
-    .nav-item{
-      color: var(--muted);
-      border-radius: 10px;
-      padding: 10px 12px;
-      transition: .15s ease;
-    }
-    .nav-item:hover{ background: rgba(255,255,255,.03); color: var(--text); }
-    .nav-item.active{
-      background: rgba(59,130,246,.12);
-      color: var(--text);
-      border:1px solid rgba(59,130,246,.25);
-    }
-
     .mini{
       font-size: 11px;
       letter-spacing: .12em;
@@ -79,27 +60,89 @@
       border-radius: 12px;
     }
 
-    .task-btn{
-      border:1px solid var(--border);
-      background: rgba(0,0,0,.12);
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.5rem;
       border-radius: 12px;
-      padding: 10px 12px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      border: 1px solid var(--border);
       transition: .15s ease;
+      text-decoration: none;
     }
-    .task-btn:hover{
-      border-color: var(--border2);
-      background: rgba(255,255,255,.03);
+    .btn:active{ transform: translateY(1px); }
+
+    .btn-primary{
+      background: rgba(59,130,246,.95);
+      border-color: rgba(59,130,246,.35);
+      color: #071018;
+      box-shadow: 0 10px 30px rgba(59,130,246,.25);
+    }
+    .btn-primary:hover{
+      background: rgba(59,130,246,1);
+      box-shadow: 0 12px 36px rgba(59,130,246,.35);
       transform: translateY(-1px);
+    }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.03);
+      color: var(--text);
+      border-color: var(--border2);
+    }
+    .btn-ghost:hover{
+      background: rgba(255,255,255,.06);
+      border-color: var(--border2);
     }
 
     a.link { color: rgba(59,130,246,.95); }
     a.link:hover { text-decoration: underline; }
+
+    .screenshot-grid img {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+
+    .feature-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 8px 14px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid var(--border);
+      font-size: 12px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.25);
+      color: var(--green);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: rgba(59,130,246,.8);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
   </style>
 </head>
 
 <body class="min-h-screen">
   <script>
-    // Swap these for real targets
     const DOWNLOAD_URL = "https://github.com/truegoodcraft/TGC-BUS-Core/releases";
     const DOCS_URL     = "https://github.com/truegoodcraft/TGC-BUS-Core";
     const BUG_URL      = "https://github.com/truegoodcraft/TGC-BUS-Core/issues";
@@ -107,235 +150,337 @@
     const LICENSE_URL  = "https://github.com/truegoodcraft/TGC-BUS-Core/blob/main/LICENSE";
   </script>
 
-  <div class="mx-auto max-w-[1280px] px-4 py-6">
-    <div class="shell flex min-h-[82vh] overflow-hidden">
+  <div class="mx-auto max-w-[1280px] px-4 py-8">
+    
+    <!-- HERO SECTION -->
+    <section class="mb-12">
+      <div class="text-center max-w-[800px] mx-auto">
+        <div class="mb-4">
+          <span class="hero-badge">
+            <span class="inline-block h-2 w-2 rounded-full bg-green-400" style="box-shadow: 0 0 8px rgba(34,197,94,.4);"></span>
+            Beta · Local-first · No cloud required
+          </span>
+        </div>
+        
+        <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-4">
+          BUS Core
+        </h1>
+        
+        <p class="text-xl md:text-2xl mb-2" style="color: var(--muted);">
+          Business management for small workshops
+        </p>
+        
+        <p class="text-base mb-8 max-w-[600px] mx-auto" style="color: var(--muted);">
+          Track inventory, build products, calculate costs. Everything runs locally. Your data never leaves your machine. No subscriptions, no telemetry, no nonsense.
+        </p>
 
-      <!-- SIDEBAR -->
-      <aside class="hidden md:flex w-[240px] flex-col border-r" style="border-color: var(--border); background: rgba(0,0,0,.20);">
-        <div class="p-5">
-          <div class="text-2xl font-semibold leading-tight">BUS Core</div>
-          <div class="mt-1 text-[11px] tracking-[.18em] uppercase" style="color: var(--muted);">Beta</div>
-          <div class="mt-2 text-[12px]" style="color: rgba(59,130,246,.9);">v0.x</div>
+        <!-- CTA BUTTONS -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+          <a class="btn btn-primary text-base" href="#" onclick="window.open(DOWNLOAD_URL,'_blank')" style="min-width: 200px;">
+            ⬇ Download v0.x Beta
+          </a>
+          <a class="btn btn-ghost" href="#" onclick="window.open(DOCS_URL,'_blank')" style="min-width: 200px;">
+            📘 Read Documentation
+          </a>
         </div>
 
-        <div class="px-4">
-          <div class="sidebar-pill px-3 py-2 text-center text-[12px] font-semibold" style="color: var(--text);">
-            Tools
+        <div class="flex flex-wrap gap-3 justify-center text-sm" style="color: var(--muted);">
+          <div class="feature-pill">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Open Source (AGPLv3)
           </div>
-
-          <nav class="mt-4 space-y-1">
-            <div class="nav-item">Manufacturing</div>
-            <div class="nav-item">Inventory</div>
-            <div class="nav-item">Contacts</div>
-            <div class="nav-item">Recipes</div>
-          </nav>
-
-          <div class="mt-6 sidebar-pill px-3 py-2 text-center text-[12px] font-semibold">System</div>
-          <nav class="mt-4 space-y-1">
-            <div class="nav-item">Settings</div>
-            <div class="nav-item">Logs</div>
-          </nav>
-        </div>
-
-        <div class="mt-auto p-4">
-          <div class="flex items-center gap-2 text-[12px]" style="color: var(--muted);">
-            <span class="inline-block h-2.5 w-2.5 rounded-full" style="background: var(--green); box-shadow: 0 0 12px rgba(34,197,94,.35);"></span>
-            <span>Local-first · Offline-friendly</span>
+          <div class="feature-pill">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+            </svg>
+            Offline-friendly
+          </div>
+          <div class="feature-pill">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            Zero telemetry
           </div>
         </div>
-      </aside>
+      </div>
+    </section>
 
-      <!-- MAIN -->
-      <main class="flex-1 p-5 md:p-7">
-        <div class="mx-auto max-w-[980px]">
-
-          <!-- TOP HEADER -->
-          <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div>
-              <div class="text-2xl font-semibold tracking-wide">BUS Core</div>
-              <div class="mt-2 text-sm" style="color: var(--muted); max-width: 46ch;">
-                Local-first business core for small workshops. Tracks inventory, builds products, and calculates costs.
-              </div>
+    <!-- WHAT YOU GET SECTION -->
+    <section class="shell p-8 mb-12">
+      <div class="section-label text-center">What You Get</div>
+      <h2 class="text-2xl font-bold text-center mb-8">See the actual app you'll be running</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 screenshot-grid">
+        <!-- Screenshot placeholders - you'll replace these with actual paths -->
+        <div class="card p-4">
+          <div class="mini mb-2">Home Dashboard</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Home.jpg screenshot]
             </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Quick access to all tools and recent activity</p>
+        </div>
 
-            <div class="card w-full md:w-[260px] p-4">
-              <div class="flex items-center justify-between">
-                <span class="px-2 py-1 rounded-full text-[11px] font-semibold"
-                      style="background: rgba(255,255,255,.04); border:1px solid var(--border);">
-                  Beta
-                </span>
-              </div>
-              <div class="mt-3 text-[12px] space-y-1" style="color: var(--muted);">
-                <div class="flex justify-between"><span>Version:</span><span style="color: var(--text);">0.x</span></div>
-                <div class="flex justify-between"><span>Storage:</span><span style="color: var(--text);">Local</span></div>
-                <div class="flex justify-between"><span>Telemetry:</span><span style="color: var(--text);">Off</span></div>
-              </div>
+        <div class="card p-4">
+          <div class="mini mb-2">Inventory Management</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Invintory.jpg screenshot]
+            </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Track supplies, quantities, costs, and vendors</p>
+        </div>
+
+        <div class="card p-4">
+          <div class="mini mb-2">Recipe Builder</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Recipe.jpg screenshot]
+            </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Create blueprints with automatic cost calculation</p>
+        </div>
+
+        <div class="card p-4">
+          <div class="mini mb-2">Manufacturing Runs</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Manufacturing.jpg screenshot]
+            </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Build products and track production history</p>
+        </div>
+
+        <div class="card p-4">
+          <div class="mini mb-2">Activity Logs</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Logs.jpg screenshot]
+            </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Complete audit trail of all operations</p>
+        </div>
+
+        <div class="card p-4">
+          <div class="mini mb-2">Settings & Backup</div>
+          <div class="aspect-video bg-black/20 rounded border border-dashed" style="border-color: var(--border2);">
+            <div class="flex items-center justify-center h-full text-xs" style="color: var(--muted);">
+              [Settings.jpg screenshot]
+            </div>
+          </div>
+          <p class="text-xs mt-2" style="color: var(--muted);">Export your data anytime, password-protected</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="grid md:grid-cols-2 gap-8 mb-12">
+      
+      <!-- Mental Model -->
+      <div class="card p-6">
+        <div class="section-label">Mental Model</div>
+        <h3 class="text-xl font-semibold mb-3">How BUS Core thinks</h3>
+        <p class="text-sm mb-4" style="color: var(--muted);">
+          Understand this flow and everything makes sense.
+        </p>
+
+        <div class="flow-box p-5 mb-4">
+          <div class="flex flex-wrap items-center gap-2 text-sm mb-3">
+            <span class="px-3 py-1.5 rounded-lg font-medium" style="background: rgba(255,255,255,.04); border:1px solid var(--border);">
+              Supplies
+            </span>
+            <span style="color: var(--muted);">→</span>
+            <span class="px-3 py-1.5 rounded-lg font-medium" style="background: rgba(255,255,255,.04); border:1px solid var(--border);">
+              Blueprints
+            </span>
+            <span style="color: var(--muted);">→</span>
+            <span class="px-3 py-1.5 rounded-lg font-medium" style="background: rgba(255,255,255,.04); border:1px solid var(--border);">
+              Products
+            </span>
+          </div>
+        </div>
+
+        <div class="space-y-2 text-sm" style="color: var(--muted);">
+          <p><strong style="color: var(--text);">Supplies</strong> = Raw materials you buy (fabric, thread, hardware)</p>
+          <p><strong style="color: var(--text);">Blueprints</strong> = Recipes that define what + how much</p>
+          <p><strong style="color: var(--text);">Products</strong> = Finished goods you make or sell</p>
+          <p class="pt-2" style="color: var(--text);">Costs flow forward. Inventory flows down. Nothing is automatic magic.</p>
+        </div>
+      </div>
+
+      <!-- Getting Started -->
+      <div class="card p-6">
+        <div class="section-label">Getting Started</div>
+        <h3 class="text-xl font-semibold mb-3">First-time setup</h3>
+        <p class="text-sm mb-4" style="color: var(--muted);">
+          Do these in order. Takes 10 minutes.
+        </p>
+
+        <div class="space-y-3">
+          <div class="flex gap-3 items-start">
+            <div class="mt-1 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold" 
+                 style="background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3);">1</div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">Add your Supplies</div>
+              <div class="text-xs" style="color: var(--muted);">Name, unit, cost, starting quantity</div>
             </div>
           </div>
 
-          <!-- GRID -->
-          <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div class="flex gap-3 items-start">
+            <div class="mt-1 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold" 
+                 style="background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3);">2</div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">Create Blueprints</div>
+              <div class="text-xs" style="color: var(--muted);">Choose supplies + quantities for each product</div>
+            </div>
+          </div>
 
-            <!-- How it thinks -->
-            <section class="card p-5">
-              <div class="text-[13px] font-semibold" style="color: rgba(59,130,246,.95);">How BUS-Core Thinks</div>
-              <div class="mt-1 text-[12px]" style="color: var(--muted);">
-                If you understand this flow, you’ll stop fighting the app.
-              </div>
+          <div class="flex gap-3 items-start">
+            <div class="mt-1 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold" 
+                 style="background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3);">3</div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">Build Products</div>
+              <div class="text-xs" style="color: var(--muted);">Costs calculated automatically from blueprints</div>
+            </div>
+          </div>
 
-              <div class="flow-box mt-4 p-4">
-                <div class="flex flex-wrap items-center gap-2 text-[12px]" style="color: var(--text);">
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(255,255,255,.03); border:1px solid var(--border);">Supplies</span>
-                  <span style="color: var(--muted);">→</span>
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(255,255,255,.03); border:1px solid var(--border);">Blueprints</span>
-                  <span style="color: var(--muted);">→</span>
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(255,255,255,.03); border:1px solid var(--border);">Assemblies / Products</span>
-                </div>
-                <div class="mt-3 flex flex-wrap gap-2 text-[11px]" style="color: var(--muted);">
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(0,0,0,.12); border:1px solid var(--border);">Inventory</span>
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(0,0,0,.12); border:1px solid var(--border);">Costing</span>
-                  <span class="px-2 py-1 rounded-lg" style="background: rgba(0,0,0,.12); border:1px solid var(--border);">Pricing</span>
-                </div>
-              </div>
+          <div class="flex gap-3 items-start">
+            <div class="mt-1 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold" 
+                 style="background: rgba(59,130,246,.15); color: var(--blue); border: 1px solid rgba(59,130,246,.3);">4</div>
+            <div class="flex-1">
+              <div class="text-sm font-semibold">Manage Inventory</div>
+              <div class="text-xs" style="color: var(--muted);">Stock in, consumption, corrections</div>
+            </div>
+          </div>
+        </div>
 
-              <ul class="mt-4 space-y-2 text-[12px]" style="color: var(--muted);">
-                <li><span style="color: var(--text);">Supplies</span> = raw materials & consumables you buy.</li>
-                <li><span style="color: var(--text);">Blueprints</span> = recipes (what + how much).</li>
-                <li><span style="color: var(--text);">Assemblies / Products</span> = things you make or sell.</li>
-                <li>Costs flow forward. Inventory flows down. Nothing is “automatic magic.”</li>
-              </ul>
-            </section>
+        <div class="mt-5 p-3 rounded-lg" style="background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.25);">
+          <div class="text-xs font-semibold mb-1" style="color: var(--amber);">Reality Check</div>
+          <div class="text-xs" style="color: var(--muted);">
+            BUS Core doesn't guess. If numbers look wrong, check your inputs.
+          </div>
+        </div>
+      </div>
+    </section>
 
-            <!-- First time setup -->
-            <section class="card p-5">
-              <div class="text-[13px] font-semibold" style="color: rgba(59,130,246,.95);">First-Time Setup</div>
-              <div class="mt-1 text-[12px]" style="color: var(--muted);">Do these in order. Don’t freestyle it.</div>
+    <!-- WHY LOCAL-FIRST -->
+    <section class="shell p-8 mb-12">
+      <div class="section-label text-center">Philosophy</div>
+      <h2 class="text-2xl font-bold text-center mb-4">Why local-first?</h2>
+      <p class="text-center mb-8 max-w-[600px] mx-auto" style="color: var(--muted);">
+        Your business data is too important to live in someone else's cloud.
+      </p>
 
-              <div class="mt-4 space-y-3">
-                <div class="card px-4 py-3" style="background: rgba(0,0,0,.12);">
-                  <div class="flex gap-3">
-                    <span class="mt-1 h-2.5 w-2.5 rounded-full" style="background: var(--green);"></span>
-                    <div>
-                      <div class="text-[12px] font-semibold">Add your Supplies</div>
-                      <div class="text-[12px]" style="color: var(--muted);">name, unit, cost, starting quantity.</div>
-                    </div>
-                  </div>
-                </div>
+      <div class="grid md:grid-cols-3 gap-6 max-w-[900px] mx-auto">
+        <div class="text-center">
+          <div class="text-3xl mb-3">🔒</div>
+          <div class="font-semibold mb-2">Your data, your machine</div>
+          <div class="text-sm" style="color: var(--muted);">Nothing transmitted. Ever. Full control of your business information.</div>
+        </div>
 
-                <div class="card px-4 py-3" style="background: rgba(0,0,0,.12);">
-                  <div class="flex gap-3">
-                    <span class="mt-1 h-2.5 w-2.5 rounded-full" style="background: var(--green);"></span>
-                    <div>
-                      <div class="text-[12px] font-semibold">Create a Blueprint</div>
-                      <div class="text-[12px]" style="color: var(--muted);">choose supplies + quantities.</div>
-                    </div>
-                  </div>
-                </div>
+        <div class="text-center">
+          <div class="text-3xl mb-3">💰</div>
+          <div class="font-semibold mb-2">No recurring fees</div>
+          <div class="text-sm" style="color: var(--muted);">Download once, use forever. No subscriptions, no per-user pricing.</div>
+        </div>
 
-                <div class="card px-4 py-3" style="background: rgba(0,0,0,.12);">
-                  <div class="flex gap-3">
-                    <span class="mt-1 h-2.5 w-2.5 rounded-full" style="background: var(--green);"></span>
-                    <div>
-                      <div class="text-[12px] font-semibold">Build an Assembly or Product</div>
-                      <div class="text-[12px]" style="color: var(--muted);">costs are calculated from the blueprint.</div>
-                    </div>
-                  </div>
-                </div>
+        <div class="text-center">
+          <div class="text-3xl mb-3">⚡</div>
+          <div class="font-semibold mb-2">Fast & reliable</div>
+          <div class="text-sm" style="color: var(--muted);">Works offline. No internet needed. No downtime from cloud outages.</div>
+        </div>
+      </div>
+    </section>
 
-                <div class="card px-4 py-3" style="background: rgba(0,0,0,.12);">
-                  <div class="flex gap-3">
-                    <span class="mt-1 h-2.5 w-2.5 rounded-full" style="background: var(--green);"></span>
-                    <div>
-                      <div class="text-[12px] font-semibold">Adjust Inventory</div>
-                      <div class="text-[12px]" style="color: var(--muted);">stock in, consumption, corrections.</div>
-                    </div>
-                  </div>
-                </div>
+    <!-- BETA DISCLAIMER -->
+    <section class="grid md:grid-cols-2 gap-6 mb-12">
+      <div class="card p-6">
+        <div class="section-label">Current Limitations</div>
+        <h3 class="text-lg font-semibold mb-3">This is beta software</h3>
+        
+        <ul class="space-y-2 text-sm mb-4" style="color: var(--muted);">
+          <li class="flex gap-2">
+            <span>•</span>
+            <span>Single-machine only (no multi-user access yet)</span>
+          </li>
+          <li class="flex gap-2">
+            <span>•</span>
+            <span>Manual backup & restore (no auto-sync)</span>
+          </li>
+          <li class="flex gap-2">
+            <span>•</span>
+            <span>Database schema may change between versions</span>
+          </li>
+        </ul>
 
-                <div class="mt-4 card px-4 py-3" style="border-color: rgba(245,158,11,.35); background: rgba(245,158,11,.06);">
-                  <div class="text-[12px] font-semibold" style="color: rgba(245,158,11,.95);">Reality Check</div>
-                  <div class="mt-1 text-[12px]" style="color: var(--muted);">
-                    BUS-Core doesn’t guess. If numbers are wrong, check your inputs.
-                  </div>
-                </div>
-              </div>
-            </section>
+        <div class="text-xs p-3 rounded" style="background: rgba(0,0,0,.2); border: 1px solid var(--border);">
+          <div class="font-semibold mb-1">If something breaks:</div>
+          <ol class="list-decimal pl-4 space-y-1" style="color: var(--muted);">
+            <li>Export your data (if possible)</li>
+            <li>Close BUS Core</li>
+            <li>Delete local app data</li>
+            <li>Restart and restore from export</li>
+          </ol>
+        </div>
+      </div>
 
-            <!-- Common Tasks -->
-            <section class="card p-5">
-              <div class="text-[13px] font-semibold" style="color: rgba(59,130,246,.95);">Common Tasks</div>
-              <div class="mt-1 text-[12px]" style="color: var(--muted);">Big buttons. No treasure hunt.</div>
+      <div class="card p-6">
+        <div class="section-label">Data Safety</div>
+        <h3 class="text-lg font-semibold mb-3">Your data is safe</h3>
+        
+        <div class="text-sm space-y-3" style="color: var(--muted);">
+          <p>
+            <strong style="color: var(--text);">Local storage:</strong> All data lives in your machine's application data folder. Nothing is ever transmitted to external servers.
+          </p>
+          <p>
+            <strong style="color: var(--text);">Password-protected exports:</strong> Backup your entire database as an encrypted file. Store it wherever you want.
+          </p>
+          <p>
+            <strong style="color: var(--text);">Audit trail:</strong> Every operation is logged. See exactly what changed and when.
+          </p>
+        </div>
 
-              <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">+ Add Supply</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Create material/consumable</div>
-                    </div>
-                    <div class="mini">Inventory</div>
-                  </div>
-                </a>
+        <div class="mt-4">
+          <a class="link text-sm" href="#" onclick="window.open(DOCS_URL,'_blank')">
+            → Where is my data stored?
+          </a>
+        </div>
+      </div>
+    </section>
 
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">Create Blueprint</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Define recipe & costs</div>
-                    </div>
-                    <div class="mini">Recipes</div>
-                  </div>
-                </a>
+    <!-- FINAL CTA -->
+    <section class="shell p-10 text-center mb-8">
+      <h2 class="text-3xl font-bold mb-4">Ready to take control?</h2>
+      <p class="text-lg mb-6 max-w-[500px] mx-auto" style="color: var(--muted);">
+        Download BUS Core and start managing your workshop the way it should be: locally, privately, reliably.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <a class="btn btn-primary text-base" href="#" onclick="window.open(DOWNLOAD_URL,'_blank')" style="min-width: 220px;">
+          ⬇ Download Beta Release
+        </a>
+        <a class="btn btn-ghost" href="#" onclick="window.open(DOCS_URL,'_blank')" style="min-width: 220px;">
+          📘 Documentation
+        </a>
+      </div>
+    </section>
 
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">⚡ Build Product</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Assembly / finished good</div>
-                    </div>
-                    <div class="mini">Run</div>
-                  </div>
-                </a>
+    <!-- FOOTER -->
+    <footer class="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-6 text-sm" style="color: var(--muted); border-top: 1px solid var(--border);">
+      <div>
+        BUS Core · Local-first ERP · AGPLv3
+      </div>
+      <div class="flex gap-6">
+        <a class="link" href="#" onclick="window.open(DOCS_URL,'_blank')">Docs</a>
+        <a class="link" href="#" onclick="window.open(BUG_URL,'_blank')">Bug Reports</a>
+        <a class="link" href="#" onclick="window.open(DISCORD_URL,'_blank')">Discord</a>
+        <a class="link" href="#" onclick="window.open(LICENSE_URL,'_blank')">License</a>
+      </div>
+    </footer>
 
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">Adjust Inventory</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Stock in / consume</div>
-                    </div>
-                    <div class="mini">Ledger</div>
-                  </div>
-                </a>
-
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">Manage Contacts</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Customers / vendors</div>
-                    </div>
-                    <div class="mini">Contacts</div>
-                  </div>
-                </a>
-
-                <a class="task-btn block" href="javascript:void(0)">
-                  <div class="flex items-center justify-between gap-3">
-                    <div>
-                      <div class="text-[12px] font-semibold">Settings</div>
-                      <div class="text-[12px]" style="color: var(--muted);">Paths / export / admin</div>
-                    </div>
-                    <div class="mini">System</div>
-                  </div>
-                </a>
-              </div>
-
-              <div class="mt-5 flex flex-wrap gap-3">
-                <a class="task-btn inline-flex items-center gap-2" href="#" onclick="window.open(DOWNLOAD_URL,'_blank')">
-                  <span class="text-[12px] font-semibold">Download</span>
-                  <span class="text-[12px]" style="color: var(--muted);">GitHub Releases</span>
-                </a>
-                <a class="task-btn inline-flex items-center gap-2" href="#" onclick="window.open(DOCS_URL,'_blank')">
-                  <span class="text-[12px] font-semibold">Docs</span>
-                  <span class="text-[12px]" style="color: var(--muted);">Readme / Setup</span>
-                </a>
-                <a class="task-btn inline-flex items-center gap-2" href="#" onclick="window.open(BUG_URL,'_blank')">
-                  <span class="text-[12px] fon
+  </div>
+</body>
+</html>
